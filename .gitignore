@@ -110,4 +110,4 @@ dist
 build/
 
 # nexe
-*.exe
+target/

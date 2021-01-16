@@ -13,6 +13,7 @@
     "@typescript-eslint/parser": "~4.12.0",
     "eslint": "~7.17.0",
     "eslint-config-prettier": "~7.1.0",
+    "nexe": "^4.0.0-beta.16",
     "prettier": "~2.2.1",
     "rimraf": "~3.0.2",
     "ts-node": "^9.1.1",
@@ -25,6 +26,7 @@
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
     "dev": "ts-node .",
+    "release": "nexe build/src/main.js -o target/mta-discord-rpc.exe",
     "lint": "eslint . --ext .ts,.tsx"
   },
   "author": "pkfln",
