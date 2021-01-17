@@ -32,9 +32,12 @@
   "author": "pkfln",
   "license": "MIT",
   "dependencies": {
+    "@types/discord-rpc": "^3.0.4",
     "@types/tail": "^2.0.0",
     "dgram-as-promised": "^5.0.1",
+    "discord-rpc": "^3.1.4",
     "execa": "^5.0.0",
+    "got": "^11.8.1",
     "tail": "^2.2.0",
     "tasklist": "^4.0.1",
     "tslib": "~2.0.3",

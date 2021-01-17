@@ -92,6 +92,11 @@
     "@types/node" "*"
     "@types/responselike" "*"
 
+"@types/discord-rpc@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@types/discord-rpc/-/discord-rpc-3.0.4.tgz#2b8c380ff17797b1408fd231b3a9944da515c331"
+  integrity sha512-Ee0vt82qcg05OeJrQZ/YN+NQwaBCnAul1rVLYaMLPkwR5f44WC3BpBQNvn5Z3Axu9szaVOHqXEDBI+uAXAiyrg==
+
 "@types/http-cache-semantics@*":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/http-cache-semantics/-/http-cache-semantics-4.0.0.tgz#9140779736aa2655635ee756e2467d787cfe8a2a"
@@ -647,6 +652,14 @@ dir-glob@^3.0.1:
   integrity sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==
   dependencies:
     path-type "^4.0.0"
+
+discord-rpc@^3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/discord-rpc/-/discord-rpc-3.1.4.tgz#6d449a682e6a0dec4f0444d5f36f9ebfabaccf91"
+  integrity sha512-QaBu+gHica2SzgRAmTpuJ4J8DX9+fDwAqhvaie3hcbkU9WPqewEPh21pWdd/7vTI/JNuapU7PFm2ZKg3BTkbGg==
+  dependencies:
+    node-fetch "^2.6.1"
+    ws "^7.3.1"
 
 doctrine@^3.0.0:
   version "3.0.0"
@@ -1502,6 +1515,11 @@ nexe@^4.0.0-beta.16:
     resolve-dependencies "^6.0.4"
     rimraf "^3.0.2"
 
+node-fetch@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
+  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
+
 normalize-url@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-2.0.1.tgz#835a9da1551fa26f70e92329069a23aa6574d7e6"
@@ -2228,6 +2246,11 @@ wrappy@1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
+
+ws@^7.3.1:
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.2.tgz#782100048e54eb36fe9843363ab1c68672b261dd"
+  integrity sha512-T4tewALS3+qsrpGI/8dqNMLIVdq/g/85U98HPMa6F0m6xTbvhXU6RCQLqPH3+SlomNV/LdY6RXEbBpMH6EOJnA==
 
 xml2js@^0.4.23:
   version "0.4.23"

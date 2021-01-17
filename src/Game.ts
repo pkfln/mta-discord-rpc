@@ -5,6 +5,7 @@ import * as tasklist from 'tasklist';
 
 import MTAInstallation from './MTAInstallation';
 import MTAQuery from './MTAQuery';
+import Discord from './Discord';
 
 const WATCH_INTERVAL = 5e3; // ms
 
@@ -88,17 +89,11 @@ export default abstract class Game {
   static async updateRichPresence(): Promise<void> {
     switch (this.gameState) {
       case EGameState.CLOSED:
-        // Close RPC
-        console.log('Closing RPC');
-        // TODO: only disconnect when the connection is open
+        await Discord.disconnect();
         break;
 
       case EGameState.IDLE:
-        // Update RPC
-        console.log('IDLE');
-        // state: 'Idle',
-        // largeImageKey: 'mtasa',
-        // instance: false,
+        await Discord.setActivityIdle();
         break;
 
       case EGameState.PLAYING:
@@ -111,18 +106,8 @@ export default abstract class Game {
             !queryResponse.players.includes(await MTAInstallation.getPlayerName())
           )
             this.gameState = EGameState.IDLE;
-
-          // Update RPC
-          console.log(`PLAYING - ${queryResponse.serverName}, ${queryResponse.playersCount}/${queryResponse.playersMax}`);
-          // state: 'Playing',
-          // details: queryResponse.serverName,
-          // startTimestamp: this.lastConnection,
-          // partySize: queryResponse.playersCount,
-          // partyMax: queryResponse.playersMax,
-          // largeImageKey: `${this.ip.replace(/\./g, '_')}_${this.port}`,
-          // smallImageKey: 'mtasa',
-          // joinSecret: 'roflcopter',
-          // instance: true,
+          
+          await Discord.setActivityPlaying(this.ip, this.port, this.lastConnection, queryResponse);
         } catch {}
         break;
     }
