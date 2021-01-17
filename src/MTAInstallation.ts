@@ -1,5 +1,5 @@
 import * as path from 'path';
-import * as fs from 'fs/promises';
+import * as fs from 'fs-extra';
 
 import * as execa from 'execa';
 import { parseStringPromise } from 'xml2js';
@@ -23,7 +23,7 @@ export default abstract class MTAInstallation {
     let response: execa.ExecaReturnValue<string>;
 
     try {
-      response = await execa('powershell.exe', [`(Get-ItemProperty -Path ${regPath}).\'${regName}\'`]);
+      response = await execa('powershell.exe', [`(Get-ItemProperty -Path ${regPath}).'${regName}'`]);
 
       if (!response.stdout)
         throw Error();

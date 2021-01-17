@@ -23,7 +23,7 @@ export default abstract class Game {
   static ip: string | undefined;
   static port: number | undefined;
 
-  static resetState() {
+  static resetState(): void {
     this.gameState = EGameState.CLOSED;
     this.lastConnection = 0;
     this.logfileTail = undefined;
@@ -49,7 +49,7 @@ export default abstract class Game {
     }, WATCH_INTERVAL);
   }
 
-  static async watchConnection() {
+  static async watchConnection(): Promise<void> {
     if (this.gameState === EGameState.PLAYING || this.consoleTail || this.logfileTail) return;
 
     this.gameState = EGameState.IDLE;
@@ -60,7 +60,7 @@ export default abstract class Game {
     this.updateRichPresence();
 
     this.logfileTail.on('line', line => {
-      const connectionRegex = /\d+:\d+:\d+\s-\s\[DEBUG\]\sConnecting\sto\s(.*)\:(\d+)\s\.\.\./;
+      const connectionRegex = /\d+:\d+:\d+\s-\s\[DEBUG\]\sConnecting\sto\s(.*):(\d+)\s\.\.\./;
       const connectionMatches = connectionRegex.exec(line);
 
       if (this.gameState === EGameState.IDLE && connectionMatches?.length === 3) {
@@ -108,7 +108,9 @@ export default abstract class Game {
             this.gameState = EGameState.IDLE;
           
           await Discord.setActivityPlaying(this.ip, this.port, this.lastConnection, queryResponse);
-        } catch {}
+        } catch {
+          // Fire and forget (for now)
+        }
         break;
     }
   }

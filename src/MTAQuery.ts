@@ -12,7 +12,7 @@ export interface IQueryResponse {
 export default class MTAQuery {
   constructor(private ip: string, private port = 22003, private isUDPPort = false) {}
 
-  private async timeoutPromise(timeoutMs: number, promise: Promise<any>, failureMessage?: string): Promise<any> {
+  private async timeoutPromise(timeoutMs: number, promise: Promise<unknown>, failureMessage?: string): Promise<unknown> {
     let timeoutHandle: NodeJS.Timeout;
     const timeoutPromise = new Promise((_, reject) => {
       timeoutHandle = setTimeout(() => reject(new Error(failureMessage)), timeoutMs);
@@ -28,12 +28,8 @@ export default class MTAQuery {
     const socket = Dgram.createSocket('udp4');
     let packet: Promise<IncomingPacket>;
 
-    try {
-      await this.timeoutPromise(1000, socket.send('s', this.port + (this.isUDPPort ? 0 : 123), this.ip), 'MTAQuery: Could not send buffer to server.');
-      await this.timeoutPromise(1000, packet = socket.recv(), 'MTAQuery: Did not get any response.');
-    } catch (e) {
-      throw e;
-    }
+    await this.timeoutPromise(1000, socket.send('s', this.port + (this.isUDPPort ? 0 : 123), this.ip), 'MTAQuery: Could not send buffer to server.');
+    await this.timeoutPromise(1000, packet = socket.recv(), 'MTAQuery: Did not get any response.');
     await socket.close();
 
     let response = new TextDecoder().decode((await packet).msg);
