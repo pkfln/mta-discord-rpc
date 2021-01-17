@@ -7,7 +7,10 @@
     "node": ">= 14.15 <15"
   },
   "devDependencies": {
+    "@types/discord-rpc": "^3.0.4",
+    "@types/fs-extra": "^9.0.6",
     "@types/node": "^14.14.21",
+    "@types/tail": "^2.0.0",
     "@types/xml2js": "^0.4.7",
     "@typescript-eslint/eslint-plugin": "~4.12.0",
     "@typescript-eslint/parser": "~4.12.0",
@@ -15,6 +18,7 @@
     "eslint-config-prettier": "~7.1.0",
     "nexe": "^4.0.0-beta.16",
     "prettier": "~2.2.1",
+    "rcedit": "^3.0.0",
     "rimraf": "~3.0.2",
     "ts-node": "^9.1.1",
     "tsutils": "~3.18.0",
@@ -23,20 +27,19 @@
   "scripts": {
     "start": "node build/src/main.js",
     "clean": "rimraf coverage build tmp",
-    "build": "tsc -p tsconfig.release.json",
+    "build": "yarn clean && tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
     "dev": "ts-node .",
-    "release": "nexe build/src/main.js -o target/mta-discord-rpc.exe",
+    "release": "node release.js",
     "lint": "eslint . --ext .ts,.tsx"
   },
   "author": "pkfln",
   "license": "MIT",
   "dependencies": {
-    "@types/discord-rpc": "^3.0.4",
-    "@types/tail": "^2.0.0",
     "dgram-as-promised": "^5.0.1",
     "discord-rpc": "^3.1.4",
     "execa": "^5.0.0",
+    "fs-extra": "^9.0.1",
     "got": "^11.8.1",
     "tail": "^2.2.0",
     "tasklist": "^4.0.1",
