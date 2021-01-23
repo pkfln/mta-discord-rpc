@@ -1,4 +1,5 @@
 import Game from "./Game";
+import MessageBox from "./MessageBox";
 import MTAInstallation from "./MTAInstallation";
 
 export default abstract class Internal {
@@ -8,7 +9,7 @@ export default abstract class Internal {
 
       Game.watchMTASA();
     } catch (e) {
-      console.error(e);
+      MessageBox.show(e, 'Error', MessageBox.EMessageBoxButtons.OK, MessageBox.EMessageBoxIcons.ERROR);
     }
   }
 }
