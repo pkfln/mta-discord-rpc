@@ -42,7 +42,7 @@
 
 First make sure it works for you before you install it. **It's recommended to be on the latest Windows 10 Build (I haven't tested it on any other OS or earlier versions of Windows).**
 1. Close your MTA:SA instance if you have it running.
-2. Download the newest release from the <a href="https://github.com/pkfln/mta-discord-rpc/releases">releases page</a>.
+2. Download the newest release from the <a href="https://github.com/pkfln/mta-discord-rpc/releases">releases page</a> (mta-discord-rpc.exe).
 3. Open the folder containing the downloaded executable.
 4. Execute the file by double-clicking it.
 5. If you're not getting any errors, try to open MTA:SA.
