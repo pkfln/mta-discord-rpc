@@ -56,7 +56,7 @@ export default abstract class Game {
     this.logfileTail = new Tail(path.win32.join(await MTAInstallation.getMTAPath(), '\\MTA\\logs\\logfile.txt'));
     this.consoleTail = new Tail(path.win32.join(await MTAInstallation.getMTAPath(), '\\MTA\\logs\\console.log'), {
       useWatchFile: true,
-    }); // TODO: Check why it doesn't work with fs.watch, switch to deno solution?
+    }); // TODO: Check why it doesn't work with fs.watch, switch to deno solution? Alternative: coreconfig.xml has the connection info to the last connected server
     this.updateRichPresence();
 
     this.logfileTail.on('line', line => {
@@ -106,7 +106,7 @@ export default abstract class Game {
             !queryResponse.players.includes(await MTAInstallation.getPlayerName())
           )
             this.gameState = EGameState.IDLE;
-          
+
           await Discord.setActivityPlaying(this.ip, this.port, this.lastConnection, queryResponse);
         } catch {
           // Fire and forget (for now)

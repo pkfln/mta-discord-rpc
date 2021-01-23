@@ -76,9 +76,9 @@ class Discord {
   private async loadServerImages(): Promise<void> {
     try {
       // TODO: Add Types or use API package
-      const commits = await got('https://api.github.com/repos/pkfln/mta-discord-rpc/commits').json<any[]>();
-      const repoTree = await got(commits[0].commit.tree.url).json<any>();
-      const assetTree = await got(repoTree.tree.find(x => x.path === 'assets').url).json<any>();
+      const commits = await got('https://api.github.com/repos/pkfln/mta-discord-rpc/commits').json<Record<string, any>[]>();
+      const repoTree = await got(commits[0].commit.tree.url).json<Record<string, any>>();
+      const assetTree = await got(repoTree.tree.find(x => x.path === 'assets').url).json<Record<string, any>>();
 
       this.serverImages = assetTree.tree.map(x => x.path);
     } catch {

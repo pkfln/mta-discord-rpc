@@ -94,6 +94,7 @@ Coming soon.
 ## Known bugs
 
 - Directly connecting to another server while already being connected to one isn't picked up. (temp. fix: type `reconnect` in the MTA console)
+- Having multiple Discord instances open won't display the rich presence
 
 
 
