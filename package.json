@@ -14,6 +14,7 @@
     "@types/xml2js": "^0.4.7",
     "@typescript-eslint/eslint-plugin": "~4.12.0",
     "@typescript-eslint/parser": "~4.12.0",
+    "bufferpack": "^0.0.6",
     "eslint": "~7.17.0",
     "eslint-config-prettier": "~7.1.0",
     "nexe": "^4.0.0-beta.16",
