@@ -41,19 +41,20 @@
 ### Testing
 
 First make sure it works for you before you install it. **It's recommended to be on the latest Windows 10 Build (I haven't tested it on any other OS or earlier versions of Windows).**
-1. Download the newest release from the <a href="https://github.com/pkfln/mta-discord-rpc/releases">releases page</a>.
-2. Open the folder containing the downloaded executable.
-3. Hold <kbd>Shift</kbd> and right-click on an empty space in the Explorer window.
-4. Select "Open PowerShell window here".
-5. Type in `.\mta-discord-rpc.exe` and press <kbd>Enter</kbd>.
-6. If you don't get any error, you're ready to install it. If you do get some errors, try to fix them or open a new issue.
+1. Close your MTA:SA instance if you have it running.
+2. Download the newest release from the <a href="https://github.com/pkfln/mta-discord-rpc/releases">releases page</a>.
+3. Open the folder containing the downloaded executable.
+4. Execute the file by double-clicking it.
+5. If you're not getting any errors, try to open MTA:SA.
+6. Check your Discord Rich Presence status and see, if it's setting your status.
+6. If everything works so far, you're ready to install it. If you do get some errors, try to fix them or open a new issue.
 
 ### Installing
 
 1. Press <kbd>Win</kbd> + <kbd>R</kbd>, you should then see the Run-tool.
 2. Type in `shell:startup` and press <kbd>Enter</kbd>.
 3. Either create a shortcut to the executable you just downloaded or move it into this new folder window.
-4. Logout & relogin from your Windows user and you
+4. Next time you login to your Windows, mta-discord-rpc will automatically start.
 
 To uninstall it / disable it from the Windows startup, simply delete the downloaded executable or the shortcut you created.
 
