@@ -51,7 +51,7 @@ export default abstract class MTAInstallation {
 
     const settings = parsedConfig.mainconfig?.settings;
     const nick: string = settings[0]?.nick[0];
-    const playerName = nick.replace(/#[0-9a-f]{6}/g, ''); // remove all hex colors
+    const playerName = nick.replace(/#[0-9a-f]{6}/gi, ''); // remove all hex colors
 
     return playerName;
   }
