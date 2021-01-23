@@ -45,7 +45,7 @@ const rc = {
           }
           return next();
         },
-      ]
+      ],
     });
 
     // Patch CLI from showing up
@@ -64,8 +64,8 @@ const rc = {
     const [PeSignature] = Array.from(bufferpack.unpack('<I', await read(PeHeaderOffset, 4)));
 
     if (PeSignature !== 0x4550) throw new Error('File is missing PE header signature.');
-    
-    await write(PeHeaderOffset + 0x5C, bufferpack.pack('<H', [0x2]));
+
+    await write(PeHeaderOffset + 0x5c, bufferpack.pack('<H', [0x2]));
     await outputHandle.close();
   } catch (e) {
     console.error(e);

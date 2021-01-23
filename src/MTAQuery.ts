@@ -28,8 +28,12 @@ export default class MTAQuery {
     const socket = Dgram.createSocket('udp4');
     let packet: Promise<IncomingPacket>;
 
-    await this.timeoutPromise(1000, socket.send('s', this.port + (this.isUDPPort ? 0 : 123), this.ip), 'MTAQuery: Could not send buffer to server.');
-    await this.timeoutPromise(1000, packet = socket.recv(), 'MTAQuery: Did not get any response.');
+    await this.timeoutPromise(
+      1000,
+      socket.send('s', this.port + (this.isUDPPort ? 0 : 123), this.ip),
+      'MTAQuery: Could not send buffer to server.'
+    );
+    await this.timeoutPromise(1000, (packet = socket.recv()), 'MTAQuery: Did not get any response.');
     await socket.close();
 
     let response = new TextDecoder().decode((await packet).msg);
@@ -53,8 +57,7 @@ export default class MTAQuery {
     const playersMax = parseInt(parsedData[8]);
     const players = [];
 
-    for (let i = 9; i < 9 + (playersCount * 0x5); i += 0x5)
-      players.push(parsedData[i]);
+    for (let i = 9; i < 9 + playersCount * 0x5; i += 0x5) players.push(parsedData[i]);
 
     return { serverName, playersCount, playersMax, players };
   }

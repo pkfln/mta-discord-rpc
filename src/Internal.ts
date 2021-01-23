@@ -1,6 +1,6 @@
-import Game from "./Game";
-import MessageBox from "./MessageBox";
-import MTAInstallation from "./MTAInstallation";
+import Game from './Game';
+import MessageBox from './MessageBox';
+import MTAInstallation from './MTAInstallation';
 
 export default abstract class Internal {
   static async initializeApp(): Promise<void> {

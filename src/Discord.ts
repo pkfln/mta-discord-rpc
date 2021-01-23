@@ -87,9 +87,7 @@ class Discord {
   }
 
   private getServerImageKey(ip: string, port: number): string {
-    if (!this.serverImages.includes(`${ip}_${port}.png`))
-      return DEFAULT_IMAGE_KEY;
-
+    if (!this.serverImages.includes(`${ip}_${port}.png`)) return DEFAULT_IMAGE_KEY;
     return `${ip.replace(/\./g, '_')}_${port}`;
   }
 }

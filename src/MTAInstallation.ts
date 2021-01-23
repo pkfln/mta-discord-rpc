@@ -25,8 +25,7 @@ export default abstract class MTAInstallation {
     try {
       response = await execa('powershell.exe', [`(Get-ItemProperty -Path ${regPath}).'${regName}'`]);
 
-      if (!response.stdout)
-        throw Error();
+      if (!response.stdout) throw Error();
     } catch {
       throw Error('Could not find MTA installation path. (1)');
     }
@@ -35,7 +34,7 @@ export default abstract class MTAInstallation {
     const win32Path = path.win32.dirname(trimmedPath);
 
     try {
-      await fs.access(path.win32.join(win32Path, exeName))
+      await fs.access(path.win32.join(win32Path, exeName));
     } catch {
       throw Error('Could not find MTA installation path. (2)');
     }
