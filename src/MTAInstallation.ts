@@ -42,15 +42,24 @@ export default abstract class MTAInstallation {
     this.mtaPath = win32Path;
   }
 
-  static async getPlayerName(): Promise<string> {
+  // TODO: Type
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static async getCoreConfigSettings(): Promise<any> {
     await this.determineMTAPath();
 
     const coreConfig = await fs.readFile(path.win32.join(this.mtaPath, '\\MTA\\config\\coreconfig.xml'), 'utf8');
-    const parsedConfig = await parseStringPromise(coreConfig);
+    const parsed = await parseStringPromise(coreConfig);
 
-    const settings = parsedConfig.mainconfig?.settings;
-    const nick: string = settings[0]?.nick[0];
-    const playerName = nick.replace(/#[0-9a-f]{6}/gi, ''); // remove all hex colors
+    return Object.entries(parsed.mainconfig?.settings[0])
+      .map(val => ({ [val[0]]: val[1][0] }))
+      .reduce((prev, curr) => ({ ...prev, ...curr }));
+  }
+
+  static async getPlayerName(): Promise<string> {
+    await this.determineMTAPath();
+
+    const parsedCoreConfig = await this.getCoreConfigSettings();
+    const playerName = parsedCoreConfig.nick.replace(/#[0-9a-f]{6}/gi, ''); // remove all hex colors
 
     return playerName;
   }
