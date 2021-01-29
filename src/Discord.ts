@@ -24,6 +24,7 @@ class Discord {
   }
 
   public isConnected(): boolean {
+     // TODO: After disconnecting, this still appears to be true.
     return this.connected;
   }
 

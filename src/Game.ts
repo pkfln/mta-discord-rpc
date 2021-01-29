@@ -1,13 +1,18 @@
 import * as path from 'path';
+import * as fs from 'fs-extra';
 
-import { Tail } from 'tail';
 import * as tasklist from 'tasklist';
 
 import MTAInstallation from './MTAInstallation';
 import MTAQuery from './MTAQuery';
 import Discord from './Discord';
 
+import log from './log';
+
 const WATCH_INTERVAL = 5e3; // ms
+const PLAYER_NOT_FOUND_TIMEOUT = 20e3; // ms
+const LAST_OPENED_INTERVAL = 3e3; // ms
+const MAX_FAILED_QUERIES = 5; // 25 seconds
 
 export enum EGameState {
   CLOSED,
@@ -18,16 +23,19 @@ export enum EGameState {
 export default abstract class Game {
   static gameState = EGameState.CLOSED;
   static lastConnection = 0;
-  static consoleTail: Tail | undefined;
-  static logfileTail: Tail | undefined;
+  static lastOpened = 0;
+  static failedQueries = 0;
+  static fileWatcher: fs.FSWatcher | undefined;
   static ip: string | undefined;
   static port: number | undefined;
 
   static resetState(): void {
+    log.debug('Resetting state');
     this.gameState = EGameState.CLOSED;
     this.lastConnection = 0;
-    this.logfileTail = undefined;
-    this.consoleTail = undefined;
+    // lastOpened shouldn't get reset
+    this.failedQueries = 0;
+    if (this.fileWatcher) this.fileWatcher.close();
     this.ip = undefined;
     this.port = undefined;
     this.updateRichPresence();
@@ -36,10 +44,19 @@ export default abstract class Game {
   static watchMTASA(): void {
     setInterval(async () => {
       const mtaProcess = (await tasklist()).find(x => x.imageName === 'proxy_sa.exe');
-      if (!mtaProcess) return this.resetState();
+      if (!mtaProcess && this.gameState !== EGameState.CLOSED) {
+        log.debug('MTA was closed, resetting state');
+        return this.resetState();
+      }
+      if (mtaProcess && this.gameState === EGameState.CLOSED) {
+        log.debug('MTA was opened, setting gamestate to idle');
+        this.lastOpened = Date.now();
+        this.gameState = EGameState.IDLE;
+      }
+
+      log.silly('Watching MTASA...');
 
       switch (this.gameState) {
-        case EGameState.CLOSED: // On first run, gamestate is still closed
         case EGameState.IDLE:
           return this.watchConnection(); // Check if MTA SA is in focus?
 
@@ -50,49 +67,76 @@ export default abstract class Game {
   }
 
   static async watchConnection(): Promise<void> {
-    if (this.gameState === EGameState.PLAYING || this.consoleTail || this.logfileTail) return;
+    if (this.gameState === EGameState.PLAYING || this.fileWatcher) return;
+
+    log.silly('Watching connection...');
+
+    // Directly check if the user is on a server if it's not right after MTA was opened (might have reconnected, server lag, ...)
+    if (Date.now() - this.lastOpened > LAST_OPENED_INTERVAL) {
+      const coreConfigSettings = await MTAInstallation.getCoreConfigSettings();
+      if (coreConfigSettings.host && coreConfigSettings.port) {
+        log.debug('Found a host & port in the coreConfig settings (first check when watching connection)');
+
+        try {
+          const queryResponse = await new MTAQuery(coreConfigSettings.host, parseInt(coreConfigSettings.port, 10)).query();
+
+          if (queryResponse.players.includes(await MTAInstallation.getPlayerName())) {
+            log.debug('Player has been found on the server (first check when watching connection)');
+            this.ip = coreConfigSettings.host;
+            this.port = parseInt(coreConfigSettings.port, 10);
+            this.gameState = EGameState.PLAYING;
+            this.lastConnection = Date.now();
+            return this.updateRichPresence();
+          }
+        } catch (e) {
+          log.error('Failed to query server (first check when watching connection)');
+          log.trace(e);
+          // Fire and forget
+        }
+      }
+    }
+    
+    this.fileWatcher = fs.watch(
+      path.join(await MTAInstallation.getMTAPath(), 'MTA\\config\\'),
+      { recursive: true },
+      async (_, filename) => {
+        if (filename && filename !== 'coreconfig.xml') return;
+        if (this.gameState !== EGameState.IDLE) return;
+
+        log.silly('Detected change in coreconfig.xml...');
+
+        const coreConfigSettings = await MTAInstallation.getCoreConfigSettings();
+        if (!coreConfigSettings.host || !coreConfigSettings.port) return;
+
+        log.silly('Server settings found, continuing...');
+
+        this.ip = coreConfigSettings.host;
+        this.port = parseInt(coreConfigSettings.port, 10);
+        this.gameState = EGameState.PLAYING;
+        this.lastConnection = Date.now();
+        if (this.fileWatcher) this.fileWatcher.close();
+
+        this.updateRichPresence();
+      }
+    );
+    this.fileWatcher.on('close', () => {
+      log.debug('Filewatcher closed');
+      this.fileWatcher = undefined;
+    });
 
     this.gameState = EGameState.IDLE;
-    this.logfileTail = new Tail(path.win32.join(await MTAInstallation.getMTAPath(), '\\MTA\\logs\\logfile.txt'));
-    this.consoleTail = new Tail(path.win32.join(await MTAInstallation.getMTAPath(), '\\MTA\\logs\\console.log'), {
-      useWatchFile: true,
-    }); // TODO: Check why it doesn't work with fs.watch, switch to deno solution? Alternative: coreconfig.xml has the connection info to the last connected server
     this.updateRichPresence();
-
-    this.logfileTail.on('line', line => {
-      const connectionRegex = /\d+:\d+:\d+\s-\s\[DEBUG\]\sConnecting\sto\s(.*):(\d+)\s\.\.\./;
-      const connectionMatches = connectionRegex.exec(line);
-
-      if (this.gameState === EGameState.IDLE && connectionMatches?.length === 3) {
-        this.ip = connectionMatches[1];
-        this.port = parseInt(connectionMatches[2]);
-      }
-    });
-
-    this.consoleTail.on('line', line => {
-      const connectedRegex = /\*\sConnected!\s\[MTA:SA\sServer.*\]/;
-
-      if (!connectedRegex.test(line)) return;
-      if (!this.ip || !this.port) return;
-
-      this.gameState = EGameState.PLAYING;
-      this.lastConnection = Date.now();
-      this.logfileTail.unwatch();
-      this.consoleTail.unwatch();
-      this.logfileTail = undefined;
-      this.consoleTail = undefined;
-
-      this.updateRichPresence();
-    });
   }
 
   static async updateRichPresence(): Promise<void> {
     switch (this.gameState) {
       case EGameState.CLOSED:
+        log.debug('Disconnecting from Discord');
         await Discord.disconnect();
         break;
 
       case EGameState.IDLE:
+        log.debug('Setting activity to idle on Discord');
         await Discord.setActivityIdle();
         break;
 
@@ -102,14 +146,27 @@ export default abstract class Game {
         try {
           const queryResponse = await new MTAQuery(this.ip, this.port).query(); // TODO: If it fails multiple times, the server might have crashed
           if (
-            Date.now() - this.lastConnection > 10e3 && // MTA Query is cached for 10 seconds, player might not be in the list yet
+            Date.now() - this.lastConnection > PLAYER_NOT_FOUND_TIMEOUT && // MTA Query is cached for 10 seconds, player might not be in the list yet
             !queryResponse.players.includes(await MTAInstallation.getPlayerName())
-          )
+          ) {
+            log.debug('Player was not found on the server anymore');
             this.gameState = EGameState.IDLE;
+            return this.updateRichPresence();
+          }
 
+          log.debug('Setting activity to playing on Discord');
           await Discord.setActivityPlaying(this.ip, this.port, this.lastConnection, queryResponse);
-        } catch {
-          // Fire and forget (for now)
+        } catch (e) {
+          if (this.failedQueries < MAX_FAILED_QUERIES) {
+            this.failedQueries++;
+            log.error('Failed to query server');
+            log.trace(e);
+          } else {
+            log.debug('Max failed queries hit, setting gamestate to idle');
+            this.failedQueries = 0;
+            this.gameState = EGameState.IDLE;
+            return this.updateRichPresence();
+          }
         }
         break;
     }
