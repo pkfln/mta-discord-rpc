@@ -13,9 +13,8 @@ class Discord {
 
   constructor() {
     DiscordRPC.register(clientId);
-    this.rpcClient = new DiscordRPC.Client({ transport: 'ipc' });
+    this.rpcClient = null;
 
-    this.setupEvents();
     this.loadServerImages();
   }
 
@@ -24,7 +23,6 @@ class Discord {
   }
 
   public isConnected(): boolean {
-     // TODO: After disconnecting, this still appears to be true.
     return this.connected;
   }
 
@@ -32,6 +30,8 @@ class Discord {
     if (this.isConnected()) return;
 
     try {
+      this.rpcClient = new DiscordRPC.Client({ transport: 'ipc' });
+      this.setupEvents();
       await this.rpcClient.login({ clientId });
     } catch {
       throw new Error('Could not connect to Discord.');
@@ -43,6 +43,7 @@ class Discord {
 
     try {
       await this.rpcClient.destroy();
+      this.rpcClient = null;
       this.connected = false;
     } catch {
       throw new Error('Could not disconnect from Discord.');
