@@ -1,6 +1,6 @@
 {
   "name": "mta-discord-rpc",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "External MTA Discord Rich Presence Manager",
   "main": "src/main.ts",
   "engines": {
@@ -42,9 +42,9 @@
     "execa": "^5.0.0",
     "fs-extra": "^9.0.1",
     "got": "^11.8.1",
-    "tail": "^2.2.0",
     "tasklist": "^4.0.1",
     "tslib": "~2.0.3",
+    "tslog": "^3.1.0",
     "xml2js": "^0.4.23"
   }
 }
