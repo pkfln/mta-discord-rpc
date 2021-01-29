@@ -29,6 +29,10 @@
   * [Updating](#updating)
 * [Why?](#why)
 * [Adding server assets](#adding-server-assets)
+* [Troubleshooting](#troubleshooting)
+  * [Discord shows "Grand Theft Auto: San Andreas" as my current game](#discord-shows-grand-theft-auto-san-andreas-as-my-current-game)
+  * [Discord shows "MTA: San Andreas" as my current game](#discord-shows-mta-san-andreas-as-my-current-game)
+  * [Rich presence is not showing MTA anymore, eventhough I restarted MTA multiple times already](#rich-presence-is-not-showing-mta-anymore-eventhough-i-restarted-mta-multiple-times-already)
 * [Contributing](#contributing)
 * [Known bugs](#known-bugs)
 * [License](#license)
@@ -41,17 +45,19 @@
 ### Testing
 
 First make sure it works for you before you install it. **It's recommended to be on the latest Windows 10 Build (I haven't tested it on any other OS or earlier versions of Windows).**
-1. Close your MTA:SA instance if you have it running.
-2. Download the newest release from the <a href="https://github.com/pkfln/mta-discord-rpc/releases">releases page</a> (mta-discord-rpc.exe).
-3. Open the folder containing the downloaded executable.
-4. Execute the file by double-clicking it.
-5. If you're not getting any errors, try to open MTA:SA.
-6. Check your Discord Rich Presence status and see, if it's setting your status.
-6. If everything works so far, you're ready to install it. If you do get some errors, try to fix them or open a new issue.
+You will also need to play MTA:SA through its proxy application, so Discord doesn't pickup default GTA:SA as the current playing game.
+1. Make sure your MTA:SA uses proxy_sa.exe instead of gta_sa.exe. To check this, open your Task Manager and see which one of both applications is running while you have MTA:SA open. Click [here](#discord-shows-grand-theft-auto-san-andreas-as-my-current-game) to learn how to force this behaviour.
+2. Close your MTA:SA instance if you have it running.
+3. Download the newest release from the <a href="https://github.com/pkfln/mta-discord-rpc/releases">releases page</a> (mta-discord-rpc.exe).
+4. Open the folder containing the downloaded executable.
+5. Execute the file by double-clicking it.
+6. If you're not getting any errors, try to open MTA:SA.
+7. Check your Discord Rich Presence status and see, if it's setting your status.
+8. If everything works so far, you're ready to install it. If you do get some errors, try to fix them or open a new issue. Also don't forget to check the [Troubleshooting](#troubleshooting) section.
 
 ### Installing
 
-1. Press <kbd>Win</kbd> + <kbd>R</kbd>, you should then see the Run-tool.
+1. Press <kbd>Win</kbd> + <kbd>R</kbd>, you should then see the Run window.
 2. Type in `shell:startup` and press <kbd>Enter</kbd>.
 3. Either create a shortcut to the executable you just downloaded or move it into this new folder window.
 4. Next time you login to your Windows, mta-discord-rpc will automatically start.
@@ -84,6 +90,25 @@ If you want your server logo to be shown on the rich presence instead of the def
 
 
 
+<!-- TROUBLESHOOTING -->
+## Troubleshooting
+
+### Discord shows "Grand Theft Auto: San Andreas" as my current game
+
+You must force MTA:SA to use their proxy application. The easiest method probably is installing an ASI loader: <a href="https://www.gtagarage.com/mods/show.php?id=21709">Download Silent's ASI Loader here</a> and add & replace these files to your GTA:SA directory.
+
+
+### Discord shows "MTA: San Andreas" as my current game
+
+You probably added it manually to your Game Activity detection list. Remove it from there in the Discord settings.
+
+
+### Rich presence is not showing MTA anymore, eventhough I restarted MTA multiple times already
+
+Logout from Windows & log back in, that should fix it.
+
+
+
 <!-- CONTRIBUTING -->
 ## Contributing
 
@@ -94,7 +119,6 @@ Coming soon.
 <!-- KNOWN BUGS -->
 ## Known bugs
 
-- Directly connecting to another server while already being connected to one isn't picked up. (temp. fix: type `reconnect` in the MTA console)
 - Having multiple Discord instances open won't display the rich presence
 
 
