@@ -103,8 +103,9 @@ export default abstract class Game {
         if (filename && filename !== 'coreconfig.xml') return;
         if (this.gameState !== EGameState.IDLE) return;
 
-        log.silly('Detected change in coreconfig.xml...');
+        log.silly('Detected change in coreconfig.xml - delaying read for 1 second...');
 
+        await new Promise(r => setTimeout(r, 1e3)); // Delay
         const coreConfigSettings = await MTAInstallation.getCoreConfigSettings();
         if (!coreConfigSettings.host || !coreConfigSettings.port) return;
 
