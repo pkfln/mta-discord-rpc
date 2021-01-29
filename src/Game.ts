@@ -144,7 +144,7 @@ export default abstract class Game {
         if (!this.ip || !this.port) break;
 
         try {
-          const queryResponse = await new MTAQuery(this.ip, this.port).query(); // TODO: If it fails multiple times, the server might have crashed
+          const queryResponse = await new MTAQuery(this.ip, this.port).query();
           if (
             Date.now() - this.lastConnection > PLAYER_NOT_FOUND_TIMEOUT && // MTA Query is cached for 10 seconds, player might not be in the list yet
             !queryResponse.players.includes(await MTAInstallation.getPlayerName())
