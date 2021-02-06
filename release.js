@@ -29,6 +29,7 @@ const rc = {
       build: true,
       rc,
       ico: resolve(__dirname, './mtasa.ico'),
+      resources: ['./node_modules/gamedig/games.txt', './node_modules/gamedig/protocols/ase.js'],
       verbose: true,
       target: 'windows-x86-12.18.2',
       name: package.name,
