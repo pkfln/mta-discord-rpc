@@ -1,6 +1,6 @@
 {
   "name": "mta-discord-rpc",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "External MTA Discord Rich Presence Manager",
   "main": "src/main.ts",
   "engines": {
@@ -37,10 +37,14 @@
   "author": "pkfln",
   "license": "MIT",
   "dependencies": {
+    "@types/debounce": "^1.2.0",
+    "@types/gamedig": "^2.0.1",
+    "debounce": "^1.2.0",
     "dgram-as-promised": "^5.0.1",
     "discord-rpc": "^3.1.4",
     "execa": "^5.0.0",
     "fs-extra": "^9.0.1",
+    "gamedig": "^2.0.25",
     "got": "^11.8.1",
     "tasklist": "^4.0.1",
     "tslib": "~2.0.3",

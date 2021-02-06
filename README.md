@@ -33,7 +33,6 @@
   * [Discord shows "Grand Theft Auto: San Andreas" as my current game](#discord-shows-grand-theft-auto-san-andreas-as-my-current-game)
   * [Discord shows "MTA: San Andreas" as my current game](#discord-shows-mta-san-andreas-as-my-current-game)
   * [Rich presence is not showing MTA anymore, eventhough I restarted MTA multiple times already](#rich-presence-is-not-showing-mta-anymore-eventhough-i-restarted-mta-multiple-times-already)
-  * [My server is not getting detected](#my-server-is-not-getting-detected)
 * [Contributing](#contributing)
 * [Known bugs](#known-bugs)
 * [License](#license)
@@ -107,11 +106,6 @@ You probably added it manually to your Game Activity detection list. Remove it f
 ### Rich presence is not showing MTA anymore, eventhough I restarted MTA multiple times already
 
 Logout from Windows & log back in, that should fix it.
-
-
-### My server is not getting detected
-
-Try to avoid non-ASCII characters in your servername. The MTA Query mechanism appears to be sending wrong servername lengths if it has some non-ASCII characters, causing the parsing process to fail.
 
 
 

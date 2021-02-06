@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 
 import * as tasklist from 'tasklist';
+import { debounce } from 'debounce';
 
 import MTAInstallation from './MTAInstallation';
 import MTAQuery from './MTAQuery';
@@ -28,6 +29,7 @@ export default abstract class Game {
   static fileWatcher: fs.FSWatcher | undefined;
   static ip: string | undefined;
   static port: number | undefined;
+  static debouncedWatcherCB = debounce(Game.watcherCallback, 3000);
 
   static resetState(): void {
     log.debug('Resetting state');
@@ -95,31 +97,11 @@ export default abstract class Game {
         }
       }
     }
-    
+
     this.fileWatcher = fs.watch(
       path.join(await MTAInstallation.getMTAPath(), 'MTA\\config\\'),
       { recursive: true },
-      async (_, filename) => {
-        if (filename && filename !== 'coreconfig.xml') return;
-        if (this.gameState !== EGameState.IDLE) return;
-
-        log.silly('Detected change in coreconfig.xml - delaying read for 3 second...');
-
-        // TODO: Add a debounce instead
-        await new Promise(r => setTimeout(r, 3e3)); // Delay
-        const coreConfigSettings = await MTAInstallation.getCoreConfigSettings();
-        if (!coreConfigSettings.host || !coreConfigSettings.port) return;
-
-        log.silly('Server settings found, continuing...');
-
-        this.ip = coreConfigSettings.host;
-        this.port = parseInt(coreConfigSettings.port, 10);
-        this.gameState = EGameState.PLAYING;
-        this.lastConnection = Date.now();
-        if (this.fileWatcher) this.fileWatcher.close();
-
-        this.updateRichPresence();
-      }
+      this.debouncedWatcherCB
     );
     this.fileWatcher.on('close', () => {
       log.debug('Filewatcher closed');
@@ -128,6 +110,27 @@ export default abstract class Game {
 
     this.gameState = EGameState.IDLE;
     this.updateRichPresence();
+  }
+
+  // This callback is called through a debouncer
+  static async watcherCallback(_: string, filename: string): Promise<void> {
+    if (filename && !filename.startsWith('coreconfig.xml')) return;
+    if (Game.gameState !== EGameState.IDLE) return;
+
+    log.silly('Detected change in coreconfig.xml...');
+
+    const coreConfigSettings = await MTAInstallation.getCoreConfigSettings();
+    if (!coreConfigSettings.host || !coreConfigSettings.port) return;
+
+    log.silly('Server settings found, continuing...');
+
+    Game.ip = coreConfigSettings.host;
+    Game.port = parseInt(coreConfigSettings.port, 10);
+    Game.gameState = EGameState.PLAYING;
+    Game.lastConnection = Date.now();
+    if (Game.fileWatcher) Game.fileWatcher.close();
+
+    Game.updateRichPresence();
   }
 
   static async updateRichPresence(): Promise<void> {
