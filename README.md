@@ -32,7 +32,8 @@
 * [Troubleshooting](#troubleshooting)
   * [Discord shows "Grand Theft Auto: San Andreas" as my current game](#discord-shows-grand-theft-auto-san-andreas-as-my-current-game)
   * [Discord shows "MTA: San Andreas" as my current game](#discord-shows-mta-san-andreas-as-my-current-game)
-  * [Rich presence is not showing MTA anymore, eventhough I restarted MTA multiple times already](#rich-presence-is-not-showing-mta-anymore-eventhough-i-restarted-mta-multiple-times-already)
+  * [Rich presence is not showing MTA anymore, even though I restarted MTA multiple times already](#rich-presence-is-not-showing-mta-anymore-even-though-i-restarted-mta-multiple-times-already)
+  * [The status gets set to "Idle" even though I'm still connected to the server](#the-status-gets-set-to-idle-even-though-im-still-connected-to-the-server)
 * [Contributing](#contributing)
 * [Known bugs](#known-bugs)
 * [License](#license)
@@ -103,9 +104,17 @@ You must force MTA:SA to use their proxy application. The easiest method probabl
 You probably added it manually to your Game Activity detection list. Remove it from there in the Discord settings.
 
 
-### Rich presence is not showing MTA anymore, eventhough I restarted MTA multiple times already
+### Rich presence is not showing MTA anymore, even though I restarted MTA multiple times already
 
 Logout from Windows & log back in, that should fix it.
+
+
+
+### The status gets set to "Idle", even though I'm still connected to the server
+
+This often happens on servers which change your MTA:SA nickname (for instance, when you login to a server with a custom account system). Make sure the nickname you've set in the MTA:SA settings is equal to the one you have on the server you're connected to.
+"Supernicks" (the ones you set on a specific server to be able to use multiple color codes in your name) shouldn't matter, since they usually don't change your real MTA:SA nickname.
+If this isn't reproducible, it probably happened while the server was lagging / your ping to the server was very high for a longer period.
 
 
 
