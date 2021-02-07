@@ -65,7 +65,7 @@ You will also need to play MTA:SA through its proxy application, so Discord does
 To uninstall it / disable it from the Windows startup, simply delete the downloaded executable or the shortcut you created.
 
 ### Updating
-To update, just download the latest build from the <a href="https://github.com/pkfln/mta-discord-rpc/releases">releases page</a> and repeat the installation process.
+To update, close MTA:SA and mta-discord-rpc.exe (through the Task Manager). Then download the latest build from the <a href="https://github.com/pkfln/mta-discord-rpc/releases">releases page</a> and repeat the installation process.
 
 
 
