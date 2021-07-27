@@ -4,7 +4,7 @@ import got from 'got';
 import { IQueryResponse } from './MTAQuery';
 
 const DEFAULT_IMAGE_KEY = 'mtasa';
-const clientId = '869499599549767720';
+const clientId = '794312139908317235';
 
 class Discord {
   private rpcClient: DiscordRPC.Client;
