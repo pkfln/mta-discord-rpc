@@ -45,7 +45,7 @@ export default abstract class Game {
 
   static watchMTASA(): void {
     setInterval(async () => {
-      const mtaProcess = (await tasklist()).find(x => x.imageName === 'proxy_sa.exe');
+      const mtaProcess = (await tasklist()).find(x => x.imageName === 'Multi Theft Auto.exe');
       if (!mtaProcess && this.gameState !== EGameState.CLOSED) {
         log.debug('MTA was closed, resetting state');
         return this.resetState();
